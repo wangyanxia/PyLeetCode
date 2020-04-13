@@ -1,0 +1,65 @@
+# If you need to import additional packages or classes, please import here.
+
+visit = []
+charmatrix = []
+word = []
+n = 0
+m = 0
+
+
+def init_visit(n, m):
+    global visit
+    visit = [[False for i in range(m)] for i in range(n)]
+
+
+def DFS(row, col, idx):
+    global word
+    global charmatrix
+    if idx == len(word):
+        return True
+    r = [-1, 0, 1, 0]
+    c = [0, 1, 0, -1]
+    for i in range(4):
+        rt = row + r[i]
+        ct = col + c[i]
+        if 0 <= rt < n and 0 <= ct < m and visit[rt][ct] is False and charmatrix[rt][ct] == word[idx]:
+            visit[rt][ct] = True
+            if DFS(rt, ct, idx + 1):
+                return True
+            visit[rt][ct] = False
+    return False
+
+
+def func():
+    # please define the python2 input here.
+    # For example: a,b = map(int, raw_input().strip().split())
+    # please finish the function body here.
+    # please define the python2 output here.
+    # For example: print ___.
+    global n, m
+    global word
+    n, m = map(int, raw_input().strip().split())
+    init_visit(n, m)
+    word = raw_input()
+    for i in range(n):
+        charmatrix.append(list(raw_input()))
+    vertexes = []
+    for i in range(n):
+        for j in range(m):
+            if charmatrix[i][j] == word[0]:
+                vertexes.append((i, j))
+    if len(vertexes) == 0:
+        print 'NO'
+        return
+    flag = False
+    for vertex in vertexes:
+        if DFS(vertex[0], vertex[1], 1):
+            flag = True
+            print 'YES'
+            break
+    if flag is False:
+        print 'NO'
+
+
+if __name__ == "__main__":
+    func()
